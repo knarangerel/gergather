@@ -38,3 +38,14 @@ exports.validateLogInData = (data) => {
     valid: Object.keys(errors).length === 0 ? true : false,
   };
 };
+
+// exports.reduceUserDetails = (data) => {
+//   let userDetails = {};
+//   // TODO: category/board validation
+//   if (!isEmpty(data.bio.trim())) userDetails.bio = data.bio;
+//   if (!isEmpty(data.category.trim())) userDetails.category = data.category;
+//   if (!isEmpty(data.location.trim())) userDetails.location = data.location;
+//   if (!isEmpty(data.contactInfo.trim()))
+//     userDetails.contactInfo = data.contactInfo;
+//   return userDetails;
+// };

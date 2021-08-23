@@ -1,4 +1,4 @@
-const { admin } = require("./admin");
+const { db, admin } = require("./admin");
 
 module.exports = (req, res, next) => {
   let token;
@@ -17,8 +17,12 @@ module.exports = (req, res, next) => {
     .verifyIdToken(token)
     .then((decodedToken) => {
       req.user = decodedToken;
-      console.log(decodedToken);
-      next();
+      return db.doc(`/users/${req.user.uid}`).get();
+    })
+    .then((doc) => {
+      // TODO: should i check if doc exists?
+      req.user.imageUrl = doc.data().imageUrl;
+      return next();
     })
     .catch((err) => {
       console.error("Error while verifying token ", err);

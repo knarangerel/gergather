@@ -15,8 +15,21 @@ let db = {
     {
       createdAt: "2021-08-22T19:49:29.668Z",
       email: "user@email.com",
+      imageUrl: "",
+      bio: "hello!",
+      location: "Boston, MA",
+      category: "post-university",
+      contactInfo: "617-500-0000",
     },
   ],
+};
+
+const userDetails = {
+  credentials: {
+    userId: "",
+    email,
+  },
+  posts: [...posts],
 };
 
 // post
