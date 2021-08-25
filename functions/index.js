@@ -20,17 +20,20 @@ const {
 } = require("./handlers/users");
 
 // post routes
-app.get("/posts", getAllPosts);
-app.post("/post", FBAuth, postNew);
-app.get("/post/:postId", getPost);
-app.delete("/post/:postId", FBAuth, deletePost);
+app.get("/posts", getAllPosts); // board selection and push op
+app.post("/post", FBAuth, postNew); //
+app.get("/post/:postId", getPost); //
+app.delete("/post/:postId", FBAuth, deletePost); //
+// TODO: Edit post functionality ?
 
 // user routes
-app.post("/signup", signUp);
-app.post("/login", logIn);
-app.get("/user", FBAuth, getProfile);
-app.post("/user", FBAuth, updateProfile);
-app.post("/user/image", FBAuth, uploadImage);
+app.post("/signup", signUp); //
+app.post("/login", logIn); // error handling?
+app.get("/user", FBAuth, getProfile); // push op
+app.post("/user", FBAuth, updateProfile); // board selection
+app.post("/user/image", FBAuth, uploadImage); //
+// TODO: View someone else's profile ?
+// app.get("user/:userId", viewProfile)
 
 // TODO: debug
 exports.onUserImageChange = functions.firestore

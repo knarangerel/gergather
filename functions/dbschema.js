@@ -1,30 +1,34 @@
 // Reference Document ONLY
 
 let db = {
-  posts: [
-    {
-      userId: "user",
-      title: "title",
-      board: "board",
-      description: "description",
-      contactInfo: "contactInfo",
-      createdAt: "2021-08-22T05:01:56.175Z",
-    },
-  ],
-  users: [
-    {
-      createdAt: "2021-08-22T19:49:29.668Z",
-      email: "user@email.com",
-      imageUrl: "",
-      bio: "hello!",
-      location: "Boston, MA",
-      category: "post-university",
-      contactInfo: "617-500-0000",
-    },
-  ],
+  posts: {
+    userId: "user",
+    userImage:
+      "https://firebasestorage.googleapis.com/v0/b/${config.storageBucket}/o/${defaultImage}?alt=media",
+    title: "title",
+    board: "board",
+    description: "description",
+    contactInfo: "contactInfo",
+    createdAt: "2021-08-22T05:01:56.175Z",
+  },
+  users: {
+    firstName: "First",
+    lastName: "Last",
+    email: "user@email.com",
+    createdAt: "2021-08-22T19:49:29.668Z",
+    imageUrl:
+      "https://firebasestorage.googleapis.com/v0/b/${config.storageBucket}/o/${defaultImage}?alt=media",
+
+    // profile additions
+    bio: "Hello! This is my bio.",
+    location: "Boston, MA",
+    category: "University",
+    contactInfo: "617-500-0000",
+  },
 };
 
-const userDetails = {
+// getProfile response
+const userData = {
   credentials: {
     userId: "",
     email,
@@ -52,3 +56,12 @@ const userDetails = {
 //     "email": "",
 //     "password": "",
 // }
+
+// TODO:
+// Test every function thoroughly
+// Hook up React
+// Create every page with minimal styling to test full functionality
+//    sign up and login
+//    post pages (all posts, posts by board, new post, single post view (as owner and as visitor))
+//    user pages (owner profile view (view with posts and edit), visitor profile view)
+// Add styling

@@ -20,7 +20,6 @@ module.exports = (req, res, next) => {
       return db.doc(`/users/${req.user.uid}`).get();
     })
     .then((doc) => {
-      // TODO: should i check if doc exists?
       req.user.imageUrl = doc.data().imageUrl;
       return next();
     })

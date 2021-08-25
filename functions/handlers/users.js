@@ -8,18 +8,18 @@ const { validateSignUpData, validateLogInData } = require("../util/validators");
 
 exports.signUp = (req, res) => {
   const newUser = {
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
     email: req.body.email,
     password: req.body.password,
     confirmPassword: req.body.confirmPassword,
   };
 
-  // input validation
   const { valid, errors } = validateSignUpData(newUser);
   if (!valid) return res.status(400).json({ errors });
 
   const defaultImage = "default-pic.png";
 
-  // user sign up
   let token, userId;
   firebase
     .auth()
@@ -31,6 +31,8 @@ exports.signUp = (req, res) => {
     .then((idToken) => {
       token = idToken;
       const userCredentials = {
+        firstName: newUser.firstName,
+        lastName: newUser.lastName,
         email: newUser.email,
         createdAt: new Date().toISOString(),
         imageUrl: `https://firebasestorage.googleapis.com/v0/b/${config.storageBucket}/o/${defaultImage}?alt=media`,
@@ -57,11 +59,9 @@ exports.logIn = (req, res) => {
     password: req.body.password,
   };
 
-  // input validation
   const { valid, errors } = validateLogInData(user);
   if (!valid) return res.status(400).json({ errors });
 
-  // user log in
   firebase
     .auth()
     .signInWithEmailAndPassword(user.email, user.password)
@@ -72,6 +72,7 @@ exports.logIn = (req, res) => {
       return res.json({ token });
     })
     .catch((err) => {
+      // TODO: Maybe think about error handling for other cases
       console.error(err);
       return res
         .status(403)
@@ -81,7 +82,6 @@ exports.logIn = (req, res) => {
 
 exports.getProfile = (req, res) => {
   let userData = {};
-  // TODO: userData fetches all posts of user, not sure if that is what we want
   db.doc(`/users/${req.user.uid}`)
     .get()
     .then((doc) => {
@@ -93,7 +93,19 @@ exports.getProfile = (req, res) => {
     .then((data) => {
       userData.posts = [];
       data.forEach((doc) => {
-        userData.likes.push(doc.data());
+        // userData.posts.push({
+        //   postId: doc.id,
+        //   userId: doc.data().userId,
+        //   userImage: doc.data().userImage,
+        //   title: doc.data().title,
+        //   board: doc.data().board,
+        //   description: doc.data().description,
+        //   contactInfo: doc.data().contactInfo,
+        //   createdAt: doc.data().createdAt,
+        // });
+        const postData = doc.data();
+        postData.postId = doc.id;
+        userData.posts.push(postData);
       });
       return res.json(userData);
     })
@@ -104,7 +116,7 @@ exports.getProfile = (req, res) => {
 };
 
 exports.updateProfile = (req, res) => {
-  // TODO: Input validation
+  // TODO: input validation, mainly for board selection
   db.doc(`/users/${req.user.uid}`)
     .update(req.body)
     .then(() => {
