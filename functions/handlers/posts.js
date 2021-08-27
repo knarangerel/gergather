@@ -1,24 +1,27 @@
 const { db } = require("../util/admin");
 
-exports.getAllPosts = (req, res) => {
-  req.body.board = ["pre-university", "university", "post-university", "other"];
-  // TODO: implement board selection
-  db.collection("posts")
-    .orderBy("createdAt", "desc")
-    .get()
+const { validateCategoryData } = require("../util/validators");
+
+exports.getPosts = (req, res) => {
+  let collectionData = [];
+
+  if (req.params.board === "all") {
+    collectionData = db.collection("posts").orderBy("createdAt", "desc").get();
+  } else {
+    const { errors, valid } = validateCategoryData(req.params.board);
+    if (!valid) return res.status(400).json({ errors });
+
+    collectionData = db
+      .collection("posts")
+      .where("board", "==", req.params.board)
+      .orderBy("createdAt", "desc")
+      .get();
+  }
+
+  return collectionData
     .then((data) => {
       let posts = [];
       data.forEach((doc) => {
-        // posts.push({
-        //   postId: doc.id,
-        //   userId: doc.data().userId,
-        //   userImage: doc.data().userImage,
-        //   title: doc.data().title,
-        //   board: doc.data().board,
-        //   description: doc.data().description,
-        //   contactInfo: doc.data().contactInfo,
-        //   createdAt: doc.data().createdAt,
-        // });
         const postData = doc.data();
         postData.postId = doc.id;
         posts.push(postData);
@@ -29,7 +32,9 @@ exports.getAllPosts = (req, res) => {
 };
 
 exports.postNew = (req, res) => {
-  // TODO: validation of post input, board validation
+  const { errors, valid } = validateCategoryData(req.body.board);
+  if (!valid) return res.status(400).json({ errors });
+
   const newPost = {
     userId: req.user.uid,
     userImage: req.user.imageUrl,
@@ -86,7 +91,7 @@ exports.deletePost = (req, res) => {
       }
     })
     .then(() => {
-      return res.json({ message: "Post deleted succesfully." });
+      return res.json({ message: "Post deleted successfully." });
     })
     .catch((err) => {
       console.error(err);

@@ -36,6 +36,14 @@ const userData = {
   posts: [...posts],
 };
 
+// signup
+
+// login
+// {
+//   "email": "vic@gmail.com",
+//   "password": "victoria"
+// }
+
 // post
 // {
 //     "title": "new title",
@@ -43,25 +51,3 @@ const userData = {
 //     "description": "desc",
 //     "contactInfo": "contact by email"
 // }
-
-// signup
-// {
-//     "email": "",
-//     "password": "",
-//     "confirmPassword": ""
-// }
-
-// login
-// {
-//     "email": "",
-//     "password": "",
-// }
-
-// TODO:
-// Test every function thoroughly
-// Hook up React
-// Create every page with minimal styling to test full functionality
-//    sign up and login
-//    post pages (all posts, posts by board, new post, single post view (as owner and as visitor))
-//    user pages (owner profile view (view with posts and edit), visitor profile view)
-// Add styling

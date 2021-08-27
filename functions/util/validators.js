@@ -42,13 +42,20 @@ exports.validateLogInData = (data) => {
   };
 };
 
-// exports.reduceUserDetails = (data) => {
-//   let userDetails = {};
-//   // TODO: category/board validation
-//   if (!isEmpty(data.bio.trim())) userDetails.bio = data.bio;
-//   if (!isEmpty(data.category.trim())) userDetails.category = data.category;
-//   if (!isEmpty(data.location.trim())) userDetails.location = data.location;
-//   if (!isEmpty(data.contactInfo.trim()))
-//     userDetails.contactInfo = data.contactInfo;
-//   return userDetails;
-// };
+exports.validateCategoryData = (boardData) => {
+  let errors = {};
+
+  if (isEmpty(boardData)) errors.board = "Must not be empty.";
+  else if (
+    boardData !== "pre-university" &&
+    boardData !== "university" &&
+    boardData !== "post-university" &&
+    boardData !== "other"
+  )
+    errors.board = "Must be one of categories.";
+
+  return {
+    errors,
+    valid: Object.keys(errors).length === 0 ? true : false,
+  };
+};

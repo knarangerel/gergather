@@ -4,7 +4,11 @@ const config = require("../util/config");
 const firebase = require("firebase");
 firebase.initializeApp(config);
 
-const { validateSignUpData, validateLogInData } = require("../util/validators");
+const {
+  validateSignUpData,
+  validateLogInData,
+  validateCategoryData,
+} = require("../util/validators");
 
 exports.signUp = (req, res) => {
   const newUser = {
@@ -72,7 +76,6 @@ exports.logIn = (req, res) => {
       return res.json({ token });
     })
     .catch((err) => {
-      // TODO: Maybe think about error handling for other cases
       console.error(err);
       return res
         .status(403)
@@ -87,22 +90,16 @@ exports.getProfile = (req, res) => {
     .then((doc) => {
       if (doc.exists) {
         userData.credentials = doc.data();
-        return db.collection("posts").where("userId", "==", req.user.uid).get();
+        return db
+          .collection("posts")
+          .where("userId", "==", req.user.uid)
+          .orderBy("createdAt", "desc")
+          .get();
       }
     })
     .then((data) => {
       userData.posts = [];
       data.forEach((doc) => {
-        // userData.posts.push({
-        //   postId: doc.id,
-        //   userId: doc.data().userId,
-        //   userImage: doc.data().userImage,
-        //   title: doc.data().title,
-        //   board: doc.data().board,
-        //   description: doc.data().description,
-        //   contactInfo: doc.data().contactInfo,
-        //   createdAt: doc.data().createdAt,
-        // });
         const postData = doc.data();
         postData.postId = doc.id;
         userData.posts.push(postData);
@@ -116,7 +113,9 @@ exports.getProfile = (req, res) => {
 };
 
 exports.updateProfile = (req, res) => {
-  // TODO: input validation, mainly for board selection
+  const { valid, errors } = validateCategoryData(req.body.category);
+  if (!valid) return res.status(400).json({ errors });
+
   db.doc(`/users/${req.user.uid}`)
     .update(req.body)
     .then(() => {
