@@ -83,6 +83,24 @@ exports.logIn = (req, res) => {
     });
 };
 
+exports.getUser = (req, res) => {
+  let userData = {};
+  db.doc(`/users/${req.params.userId}`)
+    .get()
+    .then((doc) => {
+      if (!doc.exists) {
+        return res.status(404).json({ error: "User not found." });
+      }
+      userData = doc.data();
+      userData.userId = doc.id;
+      return res.json(userData);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({ error: err.code });
+    });
+};
+
 exports.getProfile = (req, res) => {
   let userData = {};
   db.doc(`/users/${req.user.uid}`)

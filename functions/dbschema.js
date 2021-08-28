@@ -1,5 +1,7 @@
 // Reference Document ONLY
 
+const { signUp } = require("./handlers/users");
+
 let db = {
   posts: {
     userId: "user",
@@ -37,6 +39,14 @@ const userData = {
 };
 
 // signup
+// login
+// {
+//   "firstName": "name",
+//   "lastName": "name",
+//   "email": "vic@gmail.com",
+//   "password": "victoria",
+//   "confirmPassword": "victoria"
+// }
 
 // login
 // {

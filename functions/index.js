@@ -9,6 +9,7 @@ const { getPosts, postNew, getPost, deletePost } = require("./handlers/posts");
 const {
   signUp,
   logIn,
+  getUser,
   uploadImage,
   updateProfile,
   getProfile,
@@ -23,9 +24,10 @@ app.delete("/post/:postId", FBAuth, deletePost);
 // user routes
 app.post("/signup", signUp);
 app.post("/login", logIn);
-app.get("/user", FBAuth, getProfile);
-app.post("/user", FBAuth, updateProfile);
-app.post("/user/image", FBAuth, uploadImage);
+app.get("/user/:userId", getUser);
+app.get("/profile", FBAuth, getProfile);
+app.post("/profile", FBAuth, updateProfile);
+app.post("/profile/image", FBAuth, uploadImage);
 
 exports.onUserImageChange = functions.firestore
   .document("/users/{userId}")
